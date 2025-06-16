@@ -1,0 +1,11 @@
+CREATE TABLE IF NOT EXISTS technologies (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50) NOT NULL,
+  description VARCHAR(90)
+);
+
+CREATE TABLE IF NOT EXISTS technology_capabilities (
+  id BIGINT PRIMARY KEY AUTO_INCREMENT,
+  technology_id BIGINT NOT NULL,
+  capability_id BIGINT NOT NULL
+);
