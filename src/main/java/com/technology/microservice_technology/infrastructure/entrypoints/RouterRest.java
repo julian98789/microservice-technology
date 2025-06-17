@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
+import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
@@ -47,9 +48,12 @@ public class RouterRest {
                     }
             )
     )
-    public RouterFunction<ServerResponse> routerFunction(TechnologyHandlerImpl technologyHandler, TechnologyCapabilityHandlerImpl technologyCapabilityHandler) {
+    public RouterFunction<ServerResponse> routerFunction(TechnologyHandlerImpl technologyHandler,
+                                                         TechnologyCapabilityHandlerImpl technologyCapabilityHandler) {
         return route(POST("/technology"), technologyHandler::createTechnology)
-                .andRoute(POST("/technology/capability/associate"), technologyCapabilityHandler::associateTechnologiesToCapability);
+                .andRoute(POST("/technology/capability/associate"), technologyCapabilityHandler::associateTechnologiesToCapability)
+                .andRoute(GET("/technology/capability/by-count/{technologyCount}"), technologyCapabilityHandler::findCapabilityIdByTechnologyCount);
+
     }
 
 

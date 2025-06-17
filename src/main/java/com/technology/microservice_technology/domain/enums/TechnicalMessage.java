@@ -12,8 +12,9 @@ public enum TechnicalMessage {
     INVALID_TECHNOLOGY_DESCRIPTION("400", "Invalid technology description. Must not be empty and max 90 chars.", "description"),
     TECHNOLOGY_ALREADY_EXISTS("409", "Technology name already exists.", "name"),
     TECHNOLOGY_CREATED("201", "Technology created successfully", ""),
-    TECHNOLOGY_NOT_FOUND("404", "La tecnología no existe", "technologyId"),
-    TECHNOLOGY_ALREADY_ASSOCIATED("409", "La tecnología ya está asociada a otra capacidad", "technologyId"),
+    SAVED_ASSOCIATION("200", "Associations saved successfully", ""),
+    TECHNOLOGY_NOT_FOUND("404", "Technology does not exist", "technologyId"),
+    TECHNOLOGY_ALREADY_ASSOCIATED("409", "The technology is already associated ", "technologyId"),
     DUPLICATE_TECHNOLOGY_ID("400", "Duplicate technologyIds in request", "technologyIds");
 
     private final String code;

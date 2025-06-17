@@ -30,7 +30,6 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
         if (uniqueIds.size() != technologyIds.size()) {
             return Mono.error(new BusinessException(TechnicalMessage.DUPLICATE_TECHNOLOGY_ID, "Duplicate technologyIds in request"));
         }
-
         return Flux.fromIterable(technologyIds)
                 .flatMap(techId -> technologyPersistencePort.existsById(techId)
                         .filter(Boolean::booleanValue)
@@ -39,7 +38,6 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
                         )
                 )
                 .then(
-                        // 3. Buscar asociaciones existentes para ese capabilityId
                         technologyCapabilityPersistencePort.findByTechnologyIds(technologyIds)
                                 .filter(tc -> tc.capabilityId().equals(capabilityId))
                                 .map(TechnologyCapability::technologyId)
@@ -57,5 +55,10 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
                     return technologyCapabilityPersistencePort.saveAll(newAssociations)
                             .thenReturn(true);
                 });
+    }
+
+    @Override
+    public Mono<Long> findCapabilityIdByTechnologyCount(int technologyCount) {
+        return technologyCapabilityPersistencePort.findCapabilityIdByTechnologyCount(technologyCount);
     }
 }

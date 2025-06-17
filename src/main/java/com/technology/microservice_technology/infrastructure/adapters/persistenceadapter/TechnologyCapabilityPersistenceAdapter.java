@@ -31,4 +31,9 @@ public class TechnologyCapabilityPersistenceAdapter implements ITechnologyCapabi
                 .flatMapMany(repository::saveAll)
                 .then();
     }
+
+    @Override
+    public Mono<Long> findCapabilityIdByTechnologyCount(int technologyCount) {
+        return repository.findCapabilityIdByTechnologyCount(technologyCount);
+    }
 }
