@@ -1,6 +1,7 @@
 package com.technology.microservice_technology.infrastructure.entrypoints;
 
 import com.technology.microservice_technology.infrastructure.entrypoints.dto.TechnologyDTO;
+import com.technology.microservice_technology.infrastructure.entrypoints.handler.TechnologyCapabilityHandlerImpl;
 import com.technology.microservice_technology.infrastructure.entrypoints.handler.TechnologyHandlerImpl;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -46,7 +47,10 @@ public class RouterRest {
                     }
             )
     )
-    public RouterFunction<ServerResponse> routerFunction(TechnologyHandlerImpl technologyHandler) {
-        return route(POST("api/v1/technology"), technologyHandler::createTechnology);
+    public RouterFunction<ServerResponse> routerFunction(TechnologyHandlerImpl technologyHandler, TechnologyCapabilityHandlerImpl technologyCapabilityHandler) {
+        return route(POST("/technology"), technologyHandler::createTechnology)
+                .andRoute(POST("/technology/capability/associate"), technologyCapabilityHandler::associateTechnologiesToCapability);
     }
+
+
 }

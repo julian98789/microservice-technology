@@ -27,4 +27,9 @@ public class TechnologyPersistenceAdapter implements ITechnologyPersistencePort 
                 .map(tech -> true)
                 .defaultIfEmpty(false);
     }
+
+    @Override
+    public Mono<Boolean> existsById(Long id) {
+        return technologyRepository.existsById(id);
+    }
 }
