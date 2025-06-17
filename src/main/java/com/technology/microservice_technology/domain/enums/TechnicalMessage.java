@@ -15,7 +15,8 @@ public enum TechnicalMessage {
     SAVED_ASSOCIATION("200", "Associations saved successfully", ""),
     TECHNOLOGY_NOT_FOUND("404", "Technology does not exist", "technologyId"),
     TECHNOLOGY_ALREADY_ASSOCIATED("409", "The technology is already associated ", "technologyId"),
-    DUPLICATE_TECHNOLOGY_ID("400", "Duplicate technologyIds in request", "technologyIds");
+    DUPLICATE_TECHNOLOGY_ID("400", "Duplicate technologyIds in request", "technologyIds"),
+    CAPABILITY_TECHNOLOGY_LIMIT("400", "Cannot associate: capability would exceed 20 technology associations", "capabilityId"),;
 
     private final String code;
     private final String message;

@@ -10,5 +10,6 @@ public interface ITechnologyCapabilityPersistencePort {
     Flux<TechnologyCapability> findByTechnologyIds(List<Long> technologyIds);
     Mono<Void> saveAll(List<TechnologyCapability> associations);
     Mono<Long> findCapabilityIdByTechnologyCount(int technologyCount);
+    Flux<TechnologyCapability> findByCapabilityId(Long capabilityId);
 
 }

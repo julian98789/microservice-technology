@@ -22,4 +22,7 @@ HAVING COUNT(tc.technology_id) = :technologyCount
 LIMIT 1
 """)
     Mono<Long> findCapabilityIdByTechnologyCount(int technologyCount);
+
+    Flux<TechnologyCapabilityEntity> findByCapabilityId(Long capabilityId);
+
 }
