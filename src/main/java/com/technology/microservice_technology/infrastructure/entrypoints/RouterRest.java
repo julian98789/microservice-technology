@@ -53,13 +53,12 @@ public class RouterRest {
         return route(POST("/technology"), technologyHandler::createTechnology)
                 .andRoute(POST("/technology/capability/associate"),
                         technologyCapabilityHandler::associateTechnologiesToCapability)
-                .andRoute(GET("/technology/capability/by-count/{technologyCount}"),
-                        technologyCapabilityHandler::findCapabilityIdByTechnologyCount)
                 .andRoute(GET("/technology/capability/{capabilityId}/technologies"),
-                        technologyCapabilityHandler::findTechnologiesByCapabilityId
-                );
+                        technologyCapabilityHandler::findTechnologiesByCapabilityId)
+                .andRoute(
+                        GET("/technology/capability/relation-counts"),
+                        technologyCapabilityHandler::getAllCapabilityRelationCounts);
 
     }
-
 
 }

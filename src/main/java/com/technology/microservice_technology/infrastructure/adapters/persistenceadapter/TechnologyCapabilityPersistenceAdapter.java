@@ -1,5 +1,6 @@
 package com.technology.microservice_technology.infrastructure.adapters.persistenceadapter;
 
+import com.technology.microservice_technology.domain.model.CapabilityRelationCount;
 import com.technology.microservice_technology.domain.model.TechnologyCapability;
 import com.technology.microservice_technology.domain.spi.ITechnologyCapabilityPersistencePort;
 import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.entity.TechnologyCapabilityEntity;
@@ -31,10 +32,6 @@ public class TechnologyCapabilityPersistenceAdapter implements ITechnologyCapabi
                 .then();
     }
 
-    @Override
-    public Mono<Long> findCapabilityIdByTechnologyCount(int technologyCount) {
-        return repository.findCapabilityIdByTechnologyCount(technologyCount);
-    }
 
     @Override
     public Flux<TechnologyCapability> findByCapabilityId(Long capabilityId) {
@@ -46,5 +43,15 @@ public class TechnologyCapabilityPersistenceAdapter implements ITechnologyCapabi
     public Flux<Long> findTechnologyIdsByCapabilityId(Long capabilityId) {
         return repository.findByCapabilityId(capabilityId)
                 .map(TechnologyCapabilityEntity::getTechnologyId);
+    }
+
+    @Override
+    public Flux<CapabilityRelationCount> getAllCapabilityRelationCounts() {
+        return repository.findAll()
+                .groupBy(TechnologyCapabilityEntity::getCapabilityId)
+                .flatMap(groupedFlux ->
+                        groupedFlux.count()
+                                .map(count -> new CapabilityRelationCount(groupedFlux.key(), count))
+                );
     }
 }

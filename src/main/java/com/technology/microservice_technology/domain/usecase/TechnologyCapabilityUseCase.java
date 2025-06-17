@@ -3,6 +3,7 @@ package com.technology.microservice_technology.domain.usecase;
 import com.technology.microservice_technology.domain.api.ITechnologyCapabilityServicePort;
 import com.technology.microservice_technology.domain.enums.TechnicalMessage;
 import com.technology.microservice_technology.domain.exceptions.BusinessException;
+import com.technology.microservice_technology.domain.model.CapabilityRelationCount;
 import com.technology.microservice_technology.domain.model.Technology;
 import com.technology.microservice_technology.domain.model.TechnologyCapability;
 import com.technology.microservice_technology.domain.spi.ITechnologyCapabilityPersistencePort;
@@ -104,13 +105,14 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
     }
 
     @Override
-    public Mono<Long> findCapabilityIdByTechnologyCount(int technologyCount) {
-        return technologyCapabilityPersistencePort.findCapabilityIdByTechnologyCount(technologyCount);
-    }
-
-    @Override
     public Flux<Technology> findTechnologiesByCapabilityId(Long capabilityId) {
         return technologyCapabilityPersistencePort.findTechnologyIdsByCapabilityId(capabilityId)
                 .flatMap(technologyPersistencePort::findById);
     }
+
+    @Override
+    public Flux<CapabilityRelationCount> getAllCapabilityRelationCounts() {
+        return technologyCapabilityPersistencePort.getAllCapabilityRelationCounts();
+    }
+
 }

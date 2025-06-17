@@ -4,7 +4,7 @@ import com.technology.microservice_technology.domain.api.ITechnologyCapabilitySe
 import com.technology.microservice_technology.domain.enums.TechnicalMessage;
 import com.technology.microservice_technology.domain.exceptions.BusinessException;
 import com.technology.microservice_technology.domain.exceptions.TechnicalException;
-import com.technology.microservice_technology.infrastructure.entrypoints.dto.CapabilityIdResponseDTO;
+import com.technology.microservice_technology.infrastructure.entrypoints.dto.CapabilityTechnologyCountDTO;
 import com.technology.microservice_technology.infrastructure.entrypoints.dto.TechnologyCapabilityAssociationRequestDTO;
 import com.technology.microservice_technology.infrastructure.entrypoints.dto.TechnologySummaryDTO;
 import com.technology.microservice_technology.infrastructure.entrypoints.util.APIResponse;
@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -60,19 +59,18 @@ public class TechnologyCapabilityHandlerImpl {
                 });
     }
 
-    public Mono<ServerResponse> findCapabilityIdByTechnologyCount(ServerRequest request) {
-        int technologyCount = Integer.parseInt(request.pathVariable("technologyCount"));
-        return service.findCapabilityIdByTechnologyCount(technologyCount)
-                .flatMap(capabilityId -> ServerResponse.ok().bodyValue(new CapabilityIdResponseDTO(capabilityId)))
-                .switchIfEmpty(ServerResponse
-                        .ok()
-                        .bodyValue(Map.of("message", "No existe ninguna capacidad con ese número de tecnologías asociadas")));
-    }
 
     public Mono<ServerResponse> findTechnologiesByCapabilityId(ServerRequest request) {
         Long capabilityId = Long.parseLong(request.pathVariable("capabilityId"));
         return service.findTechnologiesByCapabilityId(capabilityId)
                 .map(tech -> new TechnologySummaryDTO(tech.id(), tech.name()))
+                .collectList()
+                .flatMap(list -> ServerResponse.ok().bodyValue(list));
+    }
+
+    public Mono<ServerResponse> getAllCapabilityRelationCounts(ServerRequest request) {
+        return service.getAllCapabilityRelationCounts()
+                .map(crc -> new CapabilityTechnologyCountDTO(crc.capabilityId(), crc.relationCount()))
                 .collectList()
                 .flatMap(list -> ServerResponse.ok().bodyValue(list));
     }
