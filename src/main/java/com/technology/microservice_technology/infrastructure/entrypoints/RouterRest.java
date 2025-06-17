@@ -51,8 +51,13 @@ public class RouterRest {
     public RouterFunction<ServerResponse> routerFunction(TechnologyHandlerImpl technologyHandler,
                                                          TechnologyCapabilityHandlerImpl technologyCapabilityHandler) {
         return route(POST("/technology"), technologyHandler::createTechnology)
-                .andRoute(POST("/technology/capability/associate"), technologyCapabilityHandler::associateTechnologiesToCapability)
-                .andRoute(GET("/technology/capability/by-count/{technologyCount}"), technologyCapabilityHandler::findCapabilityIdByTechnologyCount);
+                .andRoute(POST("/technology/capability/associate"),
+                        technologyCapabilityHandler::associateTechnologiesToCapability)
+                .andRoute(GET("/technology/capability/by-count/{technologyCount}"),
+                        technologyCapabilityHandler::findCapabilityIdByTechnologyCount)
+                .andRoute(GET("/technology/capability/{capabilityId}/technologies"),
+                        technologyCapabilityHandler::findTechnologiesByCapabilityId
+                );
 
     }
 

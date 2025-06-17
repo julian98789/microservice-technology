@@ -25,4 +25,6 @@ LIMIT 1
 
     Flux<TechnologyCapabilityEntity> findByCapabilityId(Long capabilityId);
 
+
+
 }

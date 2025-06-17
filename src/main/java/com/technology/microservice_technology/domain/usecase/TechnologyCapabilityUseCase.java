@@ -3,6 +3,7 @@ package com.technology.microservice_technology.domain.usecase;
 import com.technology.microservice_technology.domain.api.ITechnologyCapabilityServicePort;
 import com.technology.microservice_technology.domain.enums.TechnicalMessage;
 import com.technology.microservice_technology.domain.exceptions.BusinessException;
+import com.technology.microservice_technology.domain.model.Technology;
 import com.technology.microservice_technology.domain.model.TechnologyCapability;
 import com.technology.microservice_technology.domain.spi.ITechnologyCapabilityPersistencePort;
 import com.technology.microservice_technology.domain.spi.ITechnologyPersistencePort;
@@ -44,8 +45,8 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
         }
         if (!duplicatedIds.isEmpty()) {
             return Mono.error(new BusinessException(
-                    TechnicalMessage.DUPLICATE_TECHNOLOGY_ID,
-                    "Duplicate technologyIds in request: " + duplicatedIds
+                    TechnicalMessage.DUPLICATE_TECHNOLOGY_ID
+
             ));
         }
         return Mono.empty();
@@ -57,8 +58,8 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
                         .flatMap(exists -> {
                             if (!exists) {
                                 return Mono.error(new BusinessException(
-                                        TechnicalMessage.TECHNOLOGY_NOT_FOUND,
-                                        "Technology not found with id: " + techId
+                                        TechnicalMessage.TECHNOLOGY_NOT_FOUND
+
                                 ));
                             }
                             return Mono.just(true);
@@ -76,8 +77,8 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
                     if (!alreadyAssociatedIds.isEmpty()) {
                         return Mono.error(
                                 new BusinessException(
-                                        TechnicalMessage.TECHNOLOGY_ALREADY_ASSOCIATED,
-                                        "Technologies already associated with this capability: " + alreadyAssociatedIds
+                                        TechnicalMessage.TECHNOLOGY_ALREADY_ASSOCIATED
+
                                 )
                         );
                     }
@@ -92,8 +93,7 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
                     long total = currentCount + technologyIds.size();
                     if (total > 20) {
                         return Mono.error(new BusinessException(
-                                TechnicalMessage.CAPABILITY_TECHNOLOGY_LIMIT,
-                                "Cannot associate: capability " + capabilityId + " would exceed 20 technology associations"
+                                TechnicalMessage.CAPABILITY_TECHNOLOGY_LIMIT
                         ));
                     }
                     List<TechnologyCapability> newAssociations = technologyIds.stream()
@@ -106,5 +106,11 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
     @Override
     public Mono<Long> findCapabilityIdByTechnologyCount(int technologyCount) {
         return technologyCapabilityPersistencePort.findCapabilityIdByTechnologyCount(technologyCount);
+    }
+
+    @Override
+    public Flux<Technology> findTechnologiesByCapabilityId(Long capabilityId) {
+        return technologyCapabilityPersistencePort.findTechnologyIdsByCapabilityId(capabilityId)
+                .flatMap(technologyPersistencePort::findById);
     }
 }

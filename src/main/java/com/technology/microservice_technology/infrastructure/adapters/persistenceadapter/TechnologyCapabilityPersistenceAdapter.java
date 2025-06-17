@@ -2,6 +2,7 @@ package com.technology.microservice_technology.infrastructure.adapters.persisten
 
 import com.technology.microservice_technology.domain.model.TechnologyCapability;
 import com.technology.microservice_technology.domain.spi.ITechnologyCapabilityPersistencePort;
+import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.entity.TechnologyCapabilityEntity;
 import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.mapper.ITechnologyCapabilityEntityMapper;
 import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.repository.ITechnologyCapabilityRepository;
 import lombok.AllArgsConstructor;
@@ -39,5 +40,11 @@ public class TechnologyCapabilityPersistenceAdapter implements ITechnologyCapabi
     public Flux<TechnologyCapability> findByCapabilityId(Long capabilityId) {
         return repository.findByCapabilityId(capabilityId)
                 .map(mapper::toModel);
+    }
+
+    @Override
+    public Flux<Long> findTechnologyIdsByCapabilityId(Long capabilityId) {
+        return repository.findByCapabilityId(capabilityId)
+                .map(TechnologyCapabilityEntity::getTechnologyId);
     }
 }

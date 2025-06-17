@@ -6,6 +6,7 @@ import com.technology.microservice_technology.domain.exceptions.BusinessExceptio
 import com.technology.microservice_technology.domain.exceptions.TechnicalException;
 import com.technology.microservice_technology.infrastructure.entrypoints.dto.CapabilityIdResponseDTO;
 import com.technology.microservice_technology.infrastructure.entrypoints.dto.TechnologyCapabilityAssociationRequestDTO;
+import com.technology.microservice_technology.infrastructure.entrypoints.dto.TechnologySummaryDTO;
 import com.technology.microservice_technology.infrastructure.entrypoints.util.APIResponse;
 import com.technology.microservice_technology.infrastructure.entrypoints.util.ErrorDTO;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +67,14 @@ public class TechnologyCapabilityHandlerImpl {
                 .switchIfEmpty(ServerResponse
                         .ok()
                         .bodyValue(Map.of("message", "No existe ninguna capacidad con ese número de tecnologías asociadas")));
+    }
+
+    public Mono<ServerResponse> findTechnologiesByCapabilityId(ServerRequest request) {
+        Long capabilityId = Long.parseLong(request.pathVariable("capabilityId"));
+        return service.findTechnologiesByCapabilityId(capabilityId)
+                .map(tech -> new TechnologySummaryDTO(tech.id(), tech.name()))
+                .collectList()
+                .flatMap(list -> ServerResponse.ok().bodyValue(list));
     }
 
     private Mono<ServerResponse> buildErrorResponse(HttpStatus httpStatus,  TechnicalMessage error,
