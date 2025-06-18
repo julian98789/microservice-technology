@@ -7,6 +7,7 @@ import com.technology.microservice_technology.infrastructure.adapters.persistenc
 import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.mapper.ITechnologyCapabilityEntityMapper;
 import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.repository.ITechnologyCapabilityRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -53,5 +54,11 @@ public class TechnologyCapabilityPersistenceAdapter implements ITechnologyCapabi
                         groupedFlux.count()
                                 .map(count -> new CapabilityRelationCount(groupedFlux.key(), count))
                 );
+    }
+
+    @Override
+    @Transactional
+    public Mono<Void> deleteByTechnologyIdAndCapabilityId(Long technologyId, Long capabilityId) {
+        return repository.deleteByTechnologyIdAndCapabilityId(technologyId, capabilityId);
     }
 }

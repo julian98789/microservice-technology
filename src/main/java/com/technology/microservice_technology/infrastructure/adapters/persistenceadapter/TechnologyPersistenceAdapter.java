@@ -6,6 +6,7 @@ import com.technology.microservice_technology.infrastructure.adapters.persistenc
 import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.mapper.ITechnologyEntityMapper;
 import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.repository.ITechnologyRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Mono;
 
 @AllArgsConstructor
@@ -37,6 +38,12 @@ public class TechnologyPersistenceAdapter implements ITechnologyPersistencePort 
     public Mono<Technology> findById(Long id) {
         return technologyRepository.findById(id)
                 .map(technologyEntityMapper::toModel);
+    }
+
+    @Override
+    @Transactional
+    public Mono<Void> deleteById(Long id) {
+        return technologyRepository.deleteById(id);
     }
 
 }

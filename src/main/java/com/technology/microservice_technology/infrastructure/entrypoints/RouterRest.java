@@ -15,8 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
+import static org.springframework.web.reactive.function.server.RequestPredicates.*;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
@@ -57,7 +56,9 @@ public class RouterRest {
                         technologyCapabilityHandler::findTechnologiesByCapabilityId)
                 .andRoute(
                         GET("/technology/capability/relation-counts"),
-                        technologyCapabilityHandler::getAllCapabilityRelationCounts);
+                        technologyCapabilityHandler::getAllCapabilityRelationCounts)
+                .andRoute(DELETE("/technology/capability/{capabilityId}/exclusive-delete"),
+                        technologyCapabilityHandler::deleteTechnologiesByCapabilityId);
 
     }
 

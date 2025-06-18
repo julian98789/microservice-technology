@@ -2,12 +2,11 @@ package com.technology.microservice_technology.infrastructure.adapters.persisten
 
 import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.entity.TechnologyCapabilityEntity;
 
-import com.technology.microservice_technology.infrastructure.adapters.persistenceadapter.repository.interfaceprojection.CapabilityTechnologyCountProjection;
-import org.springframework.data.r2dbc.repository.Query;
+
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
-
+import reactor.core.publisher.Mono;
 
 import java.util.Collection;
 
@@ -18,4 +17,6 @@ public interface ITechnologyCapabilityRepository extends ReactiveCrudRepository<
     Flux<TechnologyCapabilityEntity> findByCapabilityId(Long capabilityId);
 
     Flux<TechnologyCapabilityEntity> findAll();
+
+    Mono<Void> deleteByTechnologyIdAndCapabilityId(Long technologyId, Long capabilityId);
 }

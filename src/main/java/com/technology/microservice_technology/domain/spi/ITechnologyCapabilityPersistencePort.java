@@ -13,5 +13,6 @@ public interface ITechnologyCapabilityPersistencePort {
     Flux<TechnologyCapability> findByCapabilityId(Long capabilityId);
     Flux<Long> findTechnologyIdsByCapabilityId(Long capabilityId);
     Flux<CapabilityRelationCount> getAllCapabilityRelationCounts();
+    Mono<Void> deleteByTechnologyIdAndCapabilityId(Long technologyId, Long capabilityId);
 
 }

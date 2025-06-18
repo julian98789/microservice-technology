@@ -33,8 +33,37 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
                 .then(validateTechnologiesExist(technologyIds))
                 .then(checkAlreadyAssociated(technologyIds, capabilityId))
                 .then(validateLimitNotExceeded(technologyIds, capabilityId))
-                .flatMap(newAssociations -> technologyCapabilityPersistencePort.saveAll(newAssociations).thenReturn(true));
+                .flatMap(newAssociations -> technologyCapabilityPersistencePort
+                        .saveAll(newAssociations).thenReturn(true));
     }
+
+    @Override
+    public Mono<Void> deleteTechnologiesExclusivelyByCapabilityId(Long capabilityId) {
+        return technologyCapabilityPersistencePort.findByCapabilityId(capabilityId)
+                .map(TechnologyCapability::technologyId)
+                .distinct()
+                .collectList()
+                .flatMapMany(techIds -> Flux.fromIterable(techIds)
+                        .flatMap(techId ->
+                                technologyCapabilityPersistencePort.findByTechnologyIds(List.of(techId))
+                                        .map(TechnologyCapability::capabilityId)
+                                        .distinct()
+                                        .collectList()
+                                        .flatMap(capIds -> {
+                                            if (capIds.size() == 1 && capIds.get(0).equals(capabilityId)) {
+                                                return technologyPersistencePort.deleteById(techId)
+                                                        .then(technologyCapabilityPersistencePort
+                                                                .deleteByTechnologyIdAndCapabilityId(techId, capabilityId));
+                                            } else {
+                                                return technologyCapabilityPersistencePort
+                                                        .deleteByTechnologyIdAndCapabilityId(techId, capabilityId);
+                                            }
+                                        })
+                        )
+                )
+                .then();
+    }
+
 
     private Mono<Void> validateNoDuplicates(List<Long> technologyIds) {
         Set<Long> uniqueIds = new HashSet<>();
