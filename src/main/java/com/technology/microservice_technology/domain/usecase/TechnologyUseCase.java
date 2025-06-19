@@ -27,7 +27,7 @@ public class TechnologyUseCase implements ITechnologyServicePort {
         }
         return technologyPersistencePort.existsByName(technology.name())
                 .flatMap(exists -> {
-                    if (exists) {
+                    if (Boolean.TRUE.equals(exists)) {
                         return Mono.error(new BusinessException(TechnicalMessage.TECHNOLOGY_ALREADY_EXISTS));
                     }
                     return technologyPersistencePort.save(technology);

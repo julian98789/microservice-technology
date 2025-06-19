@@ -22,7 +22,6 @@ import java.util.List;
 
 import static com.technology.microservice_technology.infrastructure.entrypoints.util.Constants.TECHNOLOGY_ERROR;
 
-
 @Component
 @RequiredArgsConstructor
 @Slf4j

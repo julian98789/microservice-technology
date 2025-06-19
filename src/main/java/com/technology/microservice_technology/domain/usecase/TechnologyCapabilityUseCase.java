@@ -86,7 +86,7 @@ public class TechnologyCapabilityUseCase implements ITechnologyCapabilityService
         return Flux.fromIterable(technologyIds)
                 .flatMap(techId -> technologyPersistencePort.existsById(techId)
                         .flatMap(exists -> {
-                            if (!exists) {
+                            if (!Boolean.TRUE.equals(exists)) {
                                 return Mono.error(new BusinessException(
                                         TechnicalMessage.TECHNOLOGY_NOT_FOUND
 
